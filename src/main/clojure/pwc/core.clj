@@ -26,13 +26,12 @@
       (fh/submit-button "Guess")))
   )
 
-(defn handle-form [guess-str]
-  (let [secretvalue 50 guess (read-string guess-str)]
-
-    (if (= secretvalue guess)
+(defn handle-form [guess-str secret]
+  (let [guess (read-string guess-str)]
+    (if (= secret guess)
       (str "You guessed it!")
       (render-form
-        (if (> guess secretvalue) (str guess "is too high. Try lower!") (str guess " is too low. Try higher!"))
+        (if (> guess secret) (str guess " is too high. Try lower!") (str guess " is too low. Try higher!"))
         )
       )
     )
@@ -42,8 +41,11 @@
   (h/html [:h1 (str "session: " session)]))
 
 (defroutes guess-routes
-  (GET "/" [] (render-form "Guess my number between 1 and 100"))
-  (POST "/guess" {params :params} (handle-form (params :guess )))
+  (GET "/" [] {:body (render-form "Guess my number between 1 and 100")
+               :session {:secret (+ 1 (rand-int 100))}
+               :headers {"Content-Type" "text/html"}
+               })
+  (POST "/guess" {params :params session :session} (handle-form (params :guess) (session :secret )))
   (GET "/view" {session :session} (view session))
   )
 
@@ -56,7 +58,5 @@
 (defn start [port]
   (ring/run-jetty (var application) {:port port :join? false}))
 
-#_("Uncomment to run")
-#_(
-(start 9000)
-  )
+#_ ("Uncomment to run")
+(start 9900)
