@@ -6,6 +6,7 @@
             [ring.adapter.jetty :as ring]
             [hiccup.core :as h]
             [hiccup.form-helpers :as fh]
+            [pwc.render :as r]
             ))
 
 (defn layout [title & body]
@@ -17,21 +18,12 @@
   (layout "Welcome Page"
     [:h3 (str "Hello " name)]))
 
-(defn render-form [txt]
-  (h/html
-    (fh/form-to [:post "/guess"]
-      txt
-      [:br ]
-      (fh/text-field :guess )
-      (fh/submit-button "Guess")))
-  )
-
 (defn handle-form [guess-str secret]
   (let [guess (read-string guess-str)]
     (if (= secret guess)
-      (str "You guessed it!")
-      (render-form
-        (if (> guess secret) (str guess " is too high. Try lower!") (str guess " is too low. Try higher!"))
+      (r/render-success-page)
+      (r/render-guess-page
+        (str guess (if (> guess secret) " is too high. Try lower!" " is too low. Try higher!"))
         )
       )
     )
@@ -41,12 +33,12 @@
   (h/html [:h1 (str "session: " session)]))
 
 (defroutes guess-routes
-  (GET "/" [] {:body (render-form "Guess my number between 1 and 100")
+  (GET "/" [] {:body (r/render-guess-page "Guess my number between 1 and 100")
                :session {:secret (+ 1 (rand-int 100))}
                :headers {"Content-Type" "text/html"}
                })
-  (POST "/guess" {params :params session :session} (handle-form (params :guess) (session :secret )))
-  (GET "/view" {session :session} (view session))
+  (POST "/guess" {params :params session :session} (handle-form (params :guess ) (session :secret )))
+  (GET "/view-session" {session :session} (view session))
   )
 
 (wrap! guess-routes :session )
@@ -58,5 +50,5 @@
 (defn start [port]
   (ring/run-jetty (var application) {:port port :join? false}))
 
-#_ ("Uncomment to run")
+#_ "Comment the following line if building a WAR"
 (start 9900)

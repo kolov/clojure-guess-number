@@ -10,8 +10,8 @@
     <name>Play With Clojure</name>
     <description>Simple Clojure Web Application</description>
     <build>
-        <sourceDirectory>src</sourceDirectory>
-        <testSourceDirectory>test</testSourceDirectory>
+        <sourceDirectory>src/main/clojure</sourceDirectory>
+        <testSourceDirectory>src/test/clojure</testSourceDirectory>
         <resources>
             <resource>
                 <directory>resources</directory>
@@ -90,10 +90,15 @@
             <version>0.3.7</version>
         </dependency>
         <dependency>
-            <groupId>ring</groupId>
-            <artifactId>ring-jetty-adapter</artifactId>
-            <version>0.3.7</version>
-        </dependency>
+             <groupId>ring</groupId>
+             <artifactId>ring-jetty-adapter</artifactId>
+             <version>0.3.7</version>
+         </dependency>
+        <dependency>
+             <groupId>enlive</groupId>
+             <artifactId>enlive</artifactId>
+             <version>1.0.0</version>
+         </dependency>
 
         <dependency>
             <groupId>hiccup</groupId>
