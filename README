@@ -1,1 +1,2 @@
-Sampla web app with clojure. Based on compojure and enlive.
+Basic get started clojure web application based on compojure and enlive. 
+Stores a random number in session and lets the user guess it giving lower/higher hints.
