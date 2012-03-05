@@ -1,2 +1,4 @@
 Basic get started clojure web application based on compojure and enlive. 
 Stores a random number in session and lets the user guess it giving lower/higher hints.
+
+This is my first clojure web app ever, just trying to het started.
